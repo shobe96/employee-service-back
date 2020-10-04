@@ -1,6 +1,7 @@
 package com.lab.software.engineering.employeeservice.domain;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +10,9 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -51,6 +55,10 @@ public class Employee {
 	@NotNull
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate hireDate;
+	
+	@ManyToMany
+	@JoinTable(name = "dept_emp", joinColumns = { @JoinColumn(name = "emp_id") }, inverseJoinColumns = {@JoinColumn(name ="dept_id")})
+	private Set<Department> departments;
 
 	public Long getId() {
 		return id;
@@ -98,6 +106,14 @@ public class Employee {
 
 	public void setHireDate(LocalDate hireDate) {
 		this.hireDate = hireDate;
+	}
+
+	public Set<Department> getDepartments() {
+		return departments;
+	}
+
+	public void setDepartments(Set<Department> departments) {
+		this.departments = departments;
 	}
 
 	@Override
