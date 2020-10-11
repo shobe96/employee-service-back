@@ -1,6 +1,7 @@
 package com.lab.software.engineering.employeeservice.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -21,37 +22,42 @@ public class EmployeeServiceImpl implements EmployeeService {
 	
 	@Override
 	public List<Employee> findAll() {
-		// TODO Auto-generated method stub
 		return (List<Employee>) employeeRepository.findAll();
 	}
 
 	@Override
-	public Employee getEmployee(int id) {
-		// TODO Auto-generated method stub
-		return null;
+	public Optional<Employee> getEmployee(Long id) {
+		return employeeRepository.findById(id);
 	}
 
 	@Override
 	public Employee create(Employee employee) {
-		// TODO Auto-generated method stub
-		return null;
+		return employeeRepository.save(employee);
 	}
 
 	@Override
-	public Employee update(Employee employee) {
-		// TODO Auto-generated method stub
-		return null;
+	public Employee update(Employee newEmployee, Long id) {
+		return employeeRepository.findById(id).map(employee -> {
+			employee.setFirstName(newEmployee.getFirstName());
+			employee.setLast_name(newEmployee.getLast_name());
+			employee.setGender(newEmployee.getGender());
+			employee.setBirthDdate(newEmployee.getBirthDdate());
+			employee.setHireDate(newEmployee.getHireDate());
+			return employeeRepository.save(employee);
+		}).orElseGet(() -> {
+			newEmployee.setId(id);
+			return employeeRepository.save(newEmployee);
+		});
 	}
 
 	@Override
-	public void delete(int id) {
-		// TODO Auto-generated method stub
+	public void delete(Long id) {
+		employeeRepository.deleteById(id);
 
 	}
 
 	@Override
 	public Page<Employee> findByFirstName(String firstName, Pageable page) {
-		// TODO Auto-generated method stub
 		return employeeRepository.findByFirstName(firstName, page);
 	}
 

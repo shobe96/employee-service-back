@@ -10,10 +10,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -27,14 +24,13 @@ import com.lab.software.engineering.employeeservice.constants.Gender;
 public class Employee {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "student_seq")
-	@SequenceGenerator(name = "employee_seq", sequenceName = "employee_seq", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Column(name = "birth_date")
 	@NotNull
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private LocalDate birthDdate;
+	private LocalDate birthDate;
 
 	@Column(name = "first_name")
 	@NotNull
@@ -55,9 +51,8 @@ public class Employee {
 	@NotNull
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate hireDate;
-	
-	@ManyToMany
-	@JoinTable(name = "dept_emp", joinColumns = { @JoinColumn(name = "emp_id") }, inverseJoinColumns = {@JoinColumn(name ="dept_id")})
+
+	@ManyToMany(mappedBy = "employees")
 	private Set<Department> departments;
 
 	public Long getId() {
@@ -69,11 +64,11 @@ public class Employee {
 	}
 
 	public LocalDate getBirthDdate() {
-		return birthDdate;
+		return birthDate;
 	}
 
 	public void setBirthDdate(LocalDate birthDdate) {
-		this.birthDdate = birthDdate;
+		this.birthDate = birthDdate;
 	}
 
 	public String getFirstName() {
@@ -118,7 +113,7 @@ public class Employee {
 
 	@Override
 	public String toString() {
-		return "Employee [id=" + id + ", birthDdate=" + birthDdate + ", firstName=" + firstName + ", last_name="
+		return "Employee [id=" + id + ", birthDate=" + birthDate + ", firstName=" + firstName + ", last_name="
 				+ last_name + ", gender=" + gender + ", hireDate=" + hireDate + "]";
 	}
 

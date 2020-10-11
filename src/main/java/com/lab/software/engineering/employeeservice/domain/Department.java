@@ -1,9 +1,7 @@
 package com.lab.software.engineering.employeeservice.domain;
 
-import java.util.List;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,11 +11,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "departments", uniqueConstraints = {
@@ -25,25 +24,24 @@ import javax.validation.constraints.Size;
 })
 public class Department {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "student_seq")
-	@SequenceGenerator(name = "student_seq", sequenceName = "student_seq", allocationSize = 1)
-	@Size(max = 4, message = "Max characters for id is 14")
-	private String id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 	
 	@Column(name = "dept_name")
 	@NotNull
 	@Size(max = 40, message = "Max characters for department name is 14")
 	private String deptName;
 	
-//	@ManyToMany
-//	@JoinTable(name = "dept_emp", joinColumns = {@JoinColumn(name = "dept_id")}, inverseJoinColumns = {@JoinColumn(name = "emp_id")})
-//	private List<Employee> employees;
+	@ManyToMany(fetch = FetchType.LAZY, targetEntity = Employee.class)
+	@JoinTable(name = "dept_emp", joinColumns = {@JoinColumn(name = "dept_id")}, inverseJoinColumns = {@JoinColumn(name = "emp_id")})
+	@JsonIgnore
+	private Set<Employee> employees;
 
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -55,13 +53,13 @@ public class Department {
 		this.deptName = deptName;
 	}
 
-//	public List<Employee> getEmployees() {
-//		return employees;
-//	}
-//
-//	public void setEmployees(List<Employee> employees) {
-//		this.employees = employees;
-//	}
+	public Set<Employee> getEmployees() {
+		return employees;
+	}
+
+	public void setEmployees(Set<Employee> employees) {
+		this.employees = employees;
+	}
 	
 	
 }
