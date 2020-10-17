@@ -1,5 +1,9 @@
 package com.lab.software.engineering.employeeservice.repository;
 
-public interface TitleRepository {
+import org.springframework.data.repository.PagingAndSortingRepository;
+
+import com.lab.software.engineering.employeeservice.domain.Title;
+
+public interface TitleRepository extends PagingAndSortingRepository<Title, Long>{
 
 }

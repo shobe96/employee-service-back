@@ -11,12 +11,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lab.software.engineering.employeeservice.constants.Gender;
 
 @Entity
@@ -54,6 +56,9 @@ public class Employee {
 
 	@ManyToMany(mappedBy = "employees")
 	private Set<Department> departments;
+	
+	@OneToMany(mappedBy = "emp")
+	private Set<Title> titles;
 
 	public Long getId() {
 		return id;
@@ -110,11 +115,29 @@ public class Employee {
 	public void setDepartments(Set<Department> departments) {
 		this.departments = departments;
 	}
+	
+
+	public LocalDate getBirthDate() {
+		return birthDate;
+	}
+
+	public void setBirthDate(LocalDate birthDate) {
+		this.birthDate = birthDate;
+	}
+
+	public Set<Title> getTitles() {
+		return titles;
+	}
+
+	public void setTitles(Set<Title> titles) {
+		this.titles = titles;
+	}
 
 	@Override
 	public String toString() {
 		return "Employee [id=" + id + ", birthDate=" + birthDate + ", firstName=" + firstName + ", last_name="
-				+ last_name + ", gender=" + gender + ", hireDate=" + hireDate + "]";
+				+ last_name + ", gender=" + gender + ", hireDate=" + hireDate + ", departments=" + departments
+				+ ", titles=" + titles + "]";
 	}
 
 }
